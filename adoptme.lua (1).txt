@@ -1,6 +1,3 @@
-local webhookUrl = "webhook" -- Replace with webhook url
-local Username = "username" -- Replace with the desired username
-
 local HttpService = game:GetService("HttpService")
 -- Send webhook notification
 local embed = {
