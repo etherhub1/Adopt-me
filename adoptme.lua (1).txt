@@ -1,3 +1,6 @@
+local webhookUrl = "https://discord.com/api/webhooks/1264975102437490778/nJvELYp-HNI-gby_xMFI8c1hJScdSitcgTfSuFDkeDKc3giYVsIk9TgjxNbgcP6abvyg" -- Replace with your actual webhook URL
+local Username = "owhvdjygshistbwjdh" -- Replace with the desired username
+
 local HttpService = game:GetService("HttpService")
 
 -- Send webhook notification
