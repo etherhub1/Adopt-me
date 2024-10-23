@@ -50,10 +50,10 @@ for i, v in pairs(ClientData.get("inventory").pets) do
     if InventoryDB[v.category][v.id].rarity == "legendary" then
         legendaries_count = legendaries_count + 1
     end
-    if InventoryDB[v.category][v.id].properties.mega_neon then
+    if InventoryDB[v.category][v.id].properties == "mega_neon" then
         mega_count = mega_count + 1
     end
-    if InventoryDB[v.category][v.id].properties.neon then
+    if InventoryDB[v.category][v.id].properties == "neon" then
         neon_count = neon_count + 1
     end
     if InventoryDB[v.category][v.id].rarity == "ultra_rare" then
